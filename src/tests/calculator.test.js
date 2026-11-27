@@ -1,6 +1,6 @@
 const { spawnSync } = require('child_process');
 const path = require('path');
-const { addition, subtraction, multiplication, division } = require('../calculator');
+const { addition, subtraction, multiplication, division, modulo, power, squareRoot } = require('../calculator');
 
 const cli = path.join(__dirname, '..', 'calculator.js');
 const run = (...args) => spawnSync('node', [cli, ...args], { encoding: 'utf8' });
@@ -33,6 +33,36 @@ describe('division', () => {
   test('números negativos', () => expect(division(-10, 2)).toBe(-5));
   test('divisão por zero lança erro', () => {
     expect(() => division(10, 0)).toThrow('Divisão por zero não é permitida.');
+  });
+});
+
+describe('modulo', () => {
+  test('5 % 2 = 1', () => expect(modulo(5, 2)).toBe(1));
+  test('divisível retorna 0', () => expect(modulo(10, 5)).toBe(0));
+  test('dividendo menor que divisor', () => expect(modulo(2, 5)).toBe(2));
+  test('dividendo negativo', () => expect(modulo(-5, 2)).toBe(-1));
+  test('decimais', () => expect(modulo(5.5, 2)).toBe(1.5));
+  test('módulo por zero lança erro', () => {
+    expect(() => modulo(5, 0)).toThrow('Módulo por zero não é permitido.');
+  });
+});
+
+describe('power', () => {
+  test('2 ^ 3 = 8', () => expect(power(2, 3)).toBe(8));
+  test('expoente zero', () => expect(power(5, 0)).toBe(1));
+  test('expoente negativo', () => expect(power(2, -2)).toBe(0.25));
+  test('base negativa', () => expect(power(-2, 3)).toBe(-8));
+  test('expoente fracionário', () => expect(power(9, 0.5)).toBe(3));
+  test('zero elevado a zero', () => expect(power(0, 0)).toBe(1));
+});
+
+describe('squareRoot', () => {
+  test('√16 = 4', () => expect(squareRoot(16)).toBe(4));
+  test('√0 = 0', () => expect(squareRoot(0)).toBe(0));
+  test('não quadrado perfeito', () => expect(squareRoot(2)).toBeCloseTo(1.41421356, 6));
+  test('decimal', () => expect(squareRoot(0.25)).toBe(0.5));
+  test('número negativo lança erro', () => {
+    expect(() => squareRoot(-1)).toThrow('Não é possível calcular a raiz quadrada de um número negativo.');
   });
 });
 
